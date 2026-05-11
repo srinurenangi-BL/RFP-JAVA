@@ -1,4 +1,4 @@
-package Day10;
+package Day10.AddressBook_System;
 
 public class Contact {
     private String firstName;
