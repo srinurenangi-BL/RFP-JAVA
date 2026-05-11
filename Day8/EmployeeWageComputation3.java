@@ -3,7 +3,7 @@ package Day8;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeWageComputation {
+public class EmployeeWageComputation3 {
 
     // Class Variables (Static Constants for UC 7)
     public static final int IS_PART_TIME = 1;
