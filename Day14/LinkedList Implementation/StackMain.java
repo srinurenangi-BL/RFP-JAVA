@@ -1,4 +1,4 @@
-package Day14;
+
 
 public class StackMain {
     // Internal LinkedList Logic for the Stack

@@ -1,4 +1,4 @@
-package Day14;
+
 
 public class QueueMain {
     static class Queue<T> {

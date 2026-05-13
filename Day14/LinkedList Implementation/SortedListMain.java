@@ -1,4 +1,4 @@
-package Day14;
+
 
 public class SortedListMain {
     static class SortedLinkedList<T extends Comparable<T>> {
