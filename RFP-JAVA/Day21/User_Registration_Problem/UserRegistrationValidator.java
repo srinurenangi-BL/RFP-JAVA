@@ -1,6 +1,6 @@
 package Day21;
 
-package com.userregistration;
+package Day21.User_Registration_Problem;
 
 import java.util.regex.Pattern;
 

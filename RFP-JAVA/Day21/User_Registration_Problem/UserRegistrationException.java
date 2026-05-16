@@ -1,6 +1,6 @@
 package Day21;
 
-package com.userregistration;
+package Day21.User_Registration_Problem;
 
 public class UserRegistrationException extends Exception {
     

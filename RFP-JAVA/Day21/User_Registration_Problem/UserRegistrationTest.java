@@ -1,6 +1,6 @@
 package Day21;
 
-package com.userregistration;
+package Day21.User_Registration_Problem;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
