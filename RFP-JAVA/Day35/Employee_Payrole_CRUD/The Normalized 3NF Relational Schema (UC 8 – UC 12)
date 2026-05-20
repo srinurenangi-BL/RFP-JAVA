@@ -1,0 +1,56 @@
+-- Drop old un-normalized setup to prevent conflicts
+DROP TABLE IF EXISTS employee_payroll;
+
+-- UC 8: Base Identity and Profiles Entity (Includes Soft-Delete Tracker from UC 12)
+CREATE TABLE employee (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(150) NOT NULL,
+    gender CHAR(1) NOT NULL,
+    phone VARCHAR(15),
+    address VARCHAR(255) DEFAULT 'Not Provided',
+    start_date DATE NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE, -- UC 12 Soft-Delete state control flag
+    PRIMARY KEY (id)
+);
+
+-- UC 8: Structural Corporate Department Catalog
+CREATE TABLE department (
+    id INT NOT NULL AUTO_INCREMENT,
+    dept_name VARCHAR(100) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+);
+
+-- UC 10 & 11: Many-to-Many Intersection Mapping
+CREATE TABLE employee_department (
+    employee_id INT NOT NULL,
+    department_id INT NOT NULL,
+    PRIMARY KEY (employee_id, department_id),
+    FOREIGN KEY (employee_id) REFERENCES employee(id) ON DELETE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
+);
+
+-- UC 9: Financial Accounting Ledger Entity (Includes Cascading Deletes from Refactor UC 8)
+CREATE TABLE payroll_details (
+    employee_id INT NOT NULL,
+    basic_pay DECIMAL(10,2) NOT NULL,
+    deductions DECIMAL(10,2) NOT NULL,
+    taxable_pay DECIMAL(10,2) NOT NULL,
+    income_tax DECIMAL(10,2) NOT NULL,
+    net_pay DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (employee_id),
+    FOREIGN KEY (employee_id) REFERENCES employee(id) ON DELETE CASCADE
+);
+
+-- Seed Clean, Normalized Baseline Configuration Info
+INSERT INTO department (dept_name) VALUES ('Sales'), ('Marketing'), ('Engineering');
+
+INSERT INTO employee (name, gender, start_date) VALUES 
+('Bill', 'M', '2018-01-01'),
+('Terissa', 'F', '2019-05-10');
+
+-- Associate Terissa to multiple departments cleanly without duplicate rows
+INSERT INTO employee_department (employee_id, department_id) VALUES (1, 1), (2, 1), (2, 2);
+
+INSERT INTO payroll_details (employee_id, basic_pay, deductions, taxable_pay, income_tax, net_pay) VALUES
+(1, 50000.00, 10000.00, 40000.00, 4000.00, 46000.00),
+(2, 60000.00, 12000.00, 48000.00, 4800.00, 55200.00);
