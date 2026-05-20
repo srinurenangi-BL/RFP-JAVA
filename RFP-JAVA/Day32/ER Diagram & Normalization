@@ -1,0 +1,55 @@
+[Employee] 1 ----- 1 [Payroll]
+    |
+    | M
+    |
+[Employee_Department] (Junction Table)
+    |
+    | M
+[Department]
+
+-- UC 11 & 12: Creating the Normalized Infrastructure
+CREATE TABLE Company_Employee (
+    EmployeeID INT IDENTITY(1,1) PRIMARY KEY,
+    EmployeeName VARCHAR(150) NOT NULL,
+    Gender CHAR(1) NOT NULL,
+    Phone VARCHAR(15),
+    Address VARCHAR(255) DEFAULT 'Not Provided',
+    StartDate DATE NOT NULL
+);
+
+CREATE TABLE Department (
+    DepartmentID INT IDENTITY(1,1) PRIMARY KEY,
+    DepartmentName VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Many-to-Many junction mapping table
+CREATE TABLE Employee_Department (
+    EmployeeID INT FOREIGN KEY REFERENCES Company_Employee(EmployeeID),
+    DepartmentID INT FOREIGN KEY REFERENCES Department(DepartmentID),
+    PRIMARY KEY (EmployeeID, DepartmentID)
+);
+
+CREATE TABLE Payroll (
+    EmployeeID INT UNIQUE FOREIGN KEY REFERENCES Company_Employee(EmployeeID),
+    BasicPay DECIMAL(18,2) NOT NULL,
+    Deductions DECIMAL(18,2) NOT NULL,
+    TaxablePay DECIMAL(18,2) NOT NULL,
+    IncomeTax DECIMAL(18,2) NOT NULL,
+    NetPay DECIMAL(18,2) NOT NULL
+);
+GO
+
+-- Seed Data for Verified Infrastructure Transitions
+INSERT INTO Company_Employee (EmployeeName, Gender, StartDate) VALUES 
+('Bill', 'M', '2018-01-01'),
+('Terissa', 'F', '2019-05-10');
+
+INSERT INTO Department (DepartmentName) VALUES ('Sales'), ('Marketing');
+
+-- UC 10 mapping resolution: Map Terissa to both departments without duplicate records
+INSERT INTO Employee_Department (EmployeeID, DepartmentID) VALUES (2, 1), (2, 2);
+
+INSERT INTO Payroll (EmployeeID, BasicPay, Deductions, TaxablePay, IncomeTax, NetPay) VALUES
+(1, 50000.00, 2000.00, 48000.00, 4000.00, 44000.00),
+(2, 60000.00, 3000.00, 57000.00, 5000.00, 52000.00);
+GO

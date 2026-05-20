@@ -1,0 +1,12 @@
+-- Replacement for UC 4 (Get All Elements)
+SELECT e.EmployeeID, e.EmployeeName, e.Gender, p.NetPay, d.DepartmentName 
+FROM Company_Employee e
+INNER JOIN Payroll p ON e.EmployeeID = p.EmployeeID
+INNER JOIN Employee_Department ed ON e.EmployeeID = ed.EmployeeID
+INNER JOIN Department d ON ed.DepartmentID = d.DepartmentID;
+
+-- Replacement for UC 7 (Aggregates Grouped by Gender)
+SELECT e.Gender, AVG(p.BasicPay) AS Avg_Basic_Pay, SUM(p.NetPay) AS Total_Net_Pay
+FROM Company_Employee e
+INNER JOIN Payroll p ON e.EmployeeID = p.EmployeeID
+GROUP BY e.Gender;
