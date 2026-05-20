@@ -1,0 +1,72 @@
+-- USE CASE 1: Create Address Book Service Database
+CREATE DATABASE address_book_service;
+USE address_book_service;
+
+
+-- USE CASE 2: Create Address Book Table
+CREATE TABLE address_book (
+    id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(100) NOT NULL,
+    zip VARCHAR(10) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+
+-- USE CASE 3: Insert new contacts into the Address Book
+INSERT INTO address_book (first_name, last_name, address, city, state, zip, phone_number, email) VALUES
+('John', 'Doe', '123 Main St', 'Miami', 'Florida', '33101', '9876543210', 'john.doe@email.com'),
+('Jane', 'Smith', '456 Oak Ave', 'New York', 'New York', '10001', '8765432109', 'jane.smith@email.com'),
+('Robert', 'Downey', '789 Pine Rd', 'Miami', 'Florida', '33102', '7654321098', 'robert.d@email.com');
+
+
+-- USE CASE 4: Edit an existing contact using their name
+UPDATE address_book 
+SET address = '999 New Way', city = 'Orlando' 
+WHERE first_name = 'John' AND last_name = 'Doe';
+
+
+-- USE CASE 5: Delete a person using their name
+DELETE FROM address_book 
+WHERE first_name = 'Robert' AND last_name = 'Downey';
+
+
+-- USE CASE 6: Retrieve persons belonging to a specific City or State
+SELECT * FROM address_book WHERE city = 'Miami';
+SELECT * FROM address_book WHERE state = 'New York';
+
+
+-- USE CASE 7: Get the size (count) of the address book grouped by City and State
+SELECT city, COUNT(*) AS total_contacts FROM address_book GROUP BY city;
+SELECT state, COUNT(*) AS total_contacts FROM address_book GROUP BY state;
+
+
+-- USE CASE 8: Retrieve entries for a given city sorted alphabetically by name
+SELECT * FROM address_book 
+WHERE city = 'Miami' 
+ORDER BY first_name ASC, last_name ASC;
+
+
+-- USE CASE 9: Alter Address Book to add a Name and Type attributes
+ALTER TABLE address_book ADD book_name VARCHAR(50) AFTER id;
+ALTER TABLE address_book ADD book_type VARCHAR(50) AFTER book_name;
+
+-- Setting sample names and types for existing records
+UPDATE address_book SET book_name = 'PersonalBook', book_type = 'Friends' WHERE first_name = 'John';
+UPDATE address_book SET book_name = 'FamilyBook', book_type = 'Family' WHERE first_name = 'Jane';
+
+
+-- USE CASE 10: Get count of contact persons by type
+SELECT book_type, COUNT(*) AS contact_count FROM address_book GROUP BY book_type;
+
+
+-- USE CASE 11: Ability to add a person to both Friend and Family types
+-- To respect database normalization (avoiding duplicate rows for the same person), 
+-- the best approach is to insert a new row matching the same person but with a different type.
+INSERT INTO address_book (book_name, book_type, first_name, last_name, address, city, state, zip, phone_number, email)
+VALUES ('JointBook', 'Family', 'John', 'Doe', '999 New Way', 'Orlando', 'Florida', '33101', '9876543210', 'john.doe@email.com');
