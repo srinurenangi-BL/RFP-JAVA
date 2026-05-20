@@ -1,0 +1,55 @@
+-- Clear old flat-table structure
+DROP TABLE employee_payroll;
+
+-- 1. Base Employee Identity Table
+CREATE TABLE employee (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(150) NOT NULL,
+    gender CHAR(1) NOT NULL,
+    phone VARCHAR(15),
+    address VARCHAR(255) DEFAULT 'Not Provided',
+    start_date DATE NOT NULL,
+    PRIMARY KEY (id)
+);
+
+-- 2. Department Catalog Table
+CREATE TABLE department (
+    id INT NOT NULL AUTO_INCREMENT,
+    dept_name VARCHAR(100) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+);
+
+-- 3. Many-to-Many Junction Table (UC 10 & 11 Fix)
+CREATE TABLE employee_department (
+    employee_id INT NOT NULL,
+    department_id INT NOT NULL,
+    PRIMARY KEY (employee_id, department_id),
+    FOREIGN KEY (employee_id) REFERENCES employee(id) ON DELETE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
+);
+
+-- 4. Payroll Accounts Table (UC 9)
+CREATE TABLE payroll (
+    employee_id INT NOT NULL,
+    basic_pay DECIMAL(10,2) NOT NULL,
+    deductions DECIMAL(10,2) NOT NULL,
+    taxable_pay DECIMAL(10,2) NOT NULL,
+    income_tax DECIMAL(10,2) NOT NULL,
+    net_pay DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (employee_id),
+    FOREIGN KEY (employee_id) REFERENCES employee(id) ON DELETE CASCADE
+);
+
+-- Seed Clean, Normalized Structure
+INSERT INTO department (dept_name) VALUES ('Sales'), ('Marketing'), ('Engineering');
+
+INSERT INTO employee (name, gender, start_date) VALUES 
+('Bill', 'M', '2018-01-01'),
+('Terissa', 'F', '2019-05-10');
+
+-- Terissa is systematically associated with both Sales (1) and Marketing (2)
+INSERT INTO employee_department (employee_id, department_id) VALUES (1, 1), (2, 1), (2, 2);
+
+INSERT INTO payroll (employee_id, basic_pay, deductions, taxable_pay, income_tax, net_pay) VALUES
+(1, 50000.00, 2500.00, 47500.00, 4750.00, 42750.00),
+(2, 60000.00, 3000.00, 57000.00, 5700.00, 51300.00);
