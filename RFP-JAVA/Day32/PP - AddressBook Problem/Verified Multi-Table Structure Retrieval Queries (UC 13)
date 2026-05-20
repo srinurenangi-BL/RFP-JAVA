@@ -1,0 +1,18 @@
+-- Replacement for UC 6 (Get All Contacts in City)
+SELECT c.*, b.TypeName 
+FROM Contact c
+INNER JOIN Contact_Type_Mapping m ON c.ContactID = m.ContactID
+INNER JOIN Book_Type b ON m.TypeID = b.TypeID
+WHERE c.City = 'Miami';
+
+-- Replacement for UC 7 (Size breakdown by City/State)
+SELECT City, COUNT(ContactID) AS Total_Contacts FROM Contact GROUP BY City;
+
+-- Replacement for UC 8 (Alphabetical sorting for given City)
+SELECT * FROM Contact WHERE City = 'Miami' ORDER BY FirstName ASC;
+
+-- Replacement for UC 10 (Count grouped by Type)
+SELECT b.TypeName, COUNT(m.ContactID) AS Total_Members 
+FROM Book_Type b
+LEFT JOIN Contact_Type_Mapping m ON b.TypeID = m.TypeID
+GROUP BY b.TypeName;

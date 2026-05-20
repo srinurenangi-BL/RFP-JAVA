@@ -1,0 +1,47 @@
+[Contact] 1 ----- M [Contact_Type_Mapping] M ----- 1 [Book_Type]
+
+
+-- Drop the old flat table structure
+DROP TABLE address_book;
+GO
+
+-- 1. Base Contact Information Table
+CREATE TABLE Contact (
+    ContactID INT IDENTITY(1,1) PRIMARY KEY,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    Address VARCHAR(255) NOT NULL,
+    City VARCHAR(100) NOT NULL,
+    State VARCHAR(100) NOT NULL,
+    Zip VARCHAR(10) NOT NULL,
+    PhoneNumber VARCHAR(15) NOT NULL,
+    Email VARCHAR(150) NOT NULL
+);
+
+-- 2. Address Book Classification Dictionary Table
+CREATE TABLE Book_Type (
+    TypeID INT IDENTITY(1,1) PRIMARY KEY,
+    BookName VARCHAR(50) NOT NULL,
+    TypeName VARCHAR(50) NOT NULL UNIQUE -- Family, Friends, Profession, etc.
+);
+
+-- 3. Many-to-Many Junction Mapping Table (Resolves UC 11 cleanly)
+CREATE TABLE Contact_Type_Mapping (
+    ContactID INT FOREIGN KEY REFERENCES Contact(ContactID) ON DELETE CASCADE,
+    TypeID INT FOREIGN KEY REFERENCES Book_Type(TypeID) ON DELETE CASCADE,
+    PRIMARY KEY (ContactID, TypeID)
+);
+GO
+
+-- Seed the Normalized Setup Structure
+INSERT INTO Book_Type (BookName, TypeName) VALUES 
+('PersonalBook', 'Friends'),
+('FamilyBook', 'Family'),
+('OfficeBook', 'Profession');
+
+INSERT INTO Contact (FirstName, LastName, Address, City, State, Zip, PhoneNumber, Email) VALUES
+('John', 'Doe', '777 Sunset Blvd', 'Miami', 'Florida', '33101', '9876543210', 'john@email.com');
+
+-- UC 11 Solution: John is mapped to BOTH Friends and Family smoothly with ZERO duplicate rows
+INSERT INTO Contact_Type_Mapping (ContactID, TypeID) VALUES (1, 1), (1, 2);
+GO

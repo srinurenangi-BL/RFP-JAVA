@@ -1,0 +1,67 @@
+-- UC 1: Create Database
+CREATE DATABASE address_book_service;
+GO
+USE address_book_service;
+GO
+
+-- UC 2: Create Address Book Table
+CREATE TABLE address_book (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(100) NOT NULL,
+    zip VARCHAR(10) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    email VARCHAR(150) NOT NULL
+);
+GO
+
+-- UC 3: Insert Contacts
+INSERT INTO address_book (first_name, last_name, address, city, state, zip, phone_number, email) VALUES
+('John', 'Doe', '123 Ghost St', 'Miami', 'Florida', '33101', '9876543210', 'john@email.com'),
+('Jane', 'Smith', '456 Apple Rd', 'New York', 'New York', '10001', '8765432109', 'jane@email.com');
+GO
+
+-- UC 4: Edit Contact Using Name
+UPDATE address_book 
+SET address = '777 Sunset Blvd', city = 'Miami' 
+WHERE first_name = 'John' AND last_name = 'Doe';
+GO
+
+-- UC 5: Delete Contact Using Name
+DELETE FROM address_book WHERE first_name = 'Jane' AND last_name = 'Smith';
+GO
+
+-- UC 6: Retrieve by City or State
+SELECT * FROM address_book WHERE city = 'Miami';
+SELECT * FROM address_book WHERE state = 'New York';
+GO
+
+-- UC 7: Count Size by City or State
+SELECT city, COUNT(*) AS Total_Contacts FROM address_book GROUP BY city;
+SELECT state, COUNT(*) AS Total_Contacts FROM address_book GROUP BY state;
+GO
+
+-- UC 8: Alphabetical Sorting for a Given City
+SELECT * FROM address_book 
+WHERE city = 'Miami' 
+ORDER BY first_name ASC, last_name ASC;
+GO
+
+-- UC 9: Extend Table to include Name and Type
+ALTER TABLE address_book ADD book_name VARCHAR(50), book_type VARCHAR(50);
+GO
+UPDATE address_book SET book_name = 'PersonalBook', book_type = 'Friends' WHERE first_name = 'John';
+GO
+
+-- UC 10: Count Contacts by Type
+SELECT book_type, COUNT(*) AS Type_Count FROM address_book GROUP BY book_type;
+GO
+
+-- UC 11: The Redundancy Trap (Adding a person to both Friend and Family)
+-- In a flat table setup, you have to duplicate the row data entirely to assign two different types.
+INSERT INTO address_book (first_name, last_name, address, city, state, zip, phone_number, email, book_name, book_type)
+VALUES ('John', 'Doe', '777 Sunset Blvd', 'Miami', 'Florida', '33101', '9876543210', 'john@email.com', 'FamilyBook', 'Family');
+GO
