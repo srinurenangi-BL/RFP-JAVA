@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Payroll App</title>
+    <style>
+        .text-error { color: red; font-size: 12px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div id="formId" class="form-content">
+    <form class="form" id="payrollForm" onreset="resetForm()" onsubmit="save(event)">
+        <label class="label text" for="name">Name</label>
+        <input class="input" type="text" id="name" name="name" placeholder="Your name.." required>
+        <error-output class="text-error" for="text"></error-output>
+
+        <label for="salary">Salary</label>
+        <input type="range" id="salary" name="salary" min="30000" max="50000" value="40000">
+        <output class="salary-output">40000</output>
+
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+    </form>
+</div>
+
+<script>
+    // UC 1: Employee Payroll Class with New Attributes [cite: 7, 9, 10]
+    class EmployeePayrollData {
+        get name() { return this._name; }
+        set name(name) {
+            let nameRegex = RegExp('^[A-Z]{1}[a-zA-Z\\s]{2,}$');
+            if (nameRegex.test(name)) this._name = name;
+            else throw 'Name is Incorrect!';
+        }
+        // Additional getters/setters for id, salary, gender, etc., would follow this pattern [cite: 8, 10]
+    }
+
+    // UC 2: On Document Load Set Event Listeners [cite: 120, 124]
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const name = document.querySelector('#name');
+        const textError = document.querySelector('.text-error');
+        
+        // Validation of Name [cite: 123]
+        name.addEventListener('input', function() {
+            try {
+                let empData = new EmployeePayrollData();
+                empData.name = name.value;
+                textError.textContent = "";
+            } catch (e) { textError.textContent = e; }
+        });
+
+        // Set Event Listener on Salary Range [cite: 122]
+        const salary = document.querySelector('#salary');
+        const output = document.querySelector('.salary-output');
+        salary.addEventListener('input', function() {
+            output.textContent = salary.value;
+        });
+    });
+
+    // UC 3: On Save Create Employee Payroll Object [cite: 178]
+    function save(event) {
+        event.preventDefault();
+        try {
+            let employeePayrollData = createEmployeePayroll();
+            // UC 4: Ability to save Object to Local Storage [cite: 227]
+            createAndUpdateStorage(employeePayrollData);
+            alert("Data Saved: " + employeePayrollData.name);
+        } catch (e) { console.error(e); }
+    }
+
+    const createEmployeePayroll = () => {
+        let employeePayrollData = new EmployeePayrollData();
+        employeePayrollData.name = document.querySelector('#name').value;
+        // Logic to extract other fields would go here [cite: 187, 188]
+        return employeePayrollData;
+    };
+
+    // UC 4: Saving to Local Storage 
+    function createAndUpdateStorage(employeePayrollData) {
+        let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+        if (employeePayrollList != undefined) {
+            employeePayrollList.push(employeePayrollData);
+        } else {
+            employeePayrollList = [employeePayrollData];
+        }
+        localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
+    }
+
+    // UC 5: Reset the Form [cite: 266, 276]
+    function resetForm() {
+        document.querySelector('#name').value = '';
+        document.querySelector('.salary-output').textContent = '40000';
+    }
+</script>
+
+</body>
+</html>
