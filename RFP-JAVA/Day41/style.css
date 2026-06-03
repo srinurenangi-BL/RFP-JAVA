@@ -1,0 +1,20 @@
+body { font-family: sans-serif; margin: 0; padding: 0; }
+
+/* F-Pattern Layout Structure */
+.header { background: #2c3e50; color: white; padding: 20px; text-align: left; }
+
+.f-container { 
+    display: grid; 
+    grid-template-columns: 200px 1fr; /* 200px for the vertical left stroke */
+    min-height: 80vh; 
+}
+
+.sidebar { background: #f4f4f4; padding: 20px; border-right: 1px solid #ddd; }
+.main-content { padding: 40px; }
+
+.footer { background: #333; color: white; text-align: center; padding: 10px; }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .f-container { grid-template-columns: 1fr; }
+}

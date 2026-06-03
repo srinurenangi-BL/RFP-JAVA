@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Card Layout</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 40px; }
+
+        /* Card Container */
+        .card {
+            background: white;
+            width: 320px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            background: #3498db; /* Placeholder color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .card-content { padding: 20px; }
+
+        .card-content h3 { margin-bottom: 10px; color: #333; }
+
+        .card-content p { color: #666; line-height: 1.5; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .card-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .card-button:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-image">IMAGE AREA</div>
+        <div class="card-content">
+            <h3>Card Title</h3>
+            <p>This is a clean, modern card component. It uses subtle shadows and hover transitions to provide a polished user experience.</p>
+            <a href="#" class="card-button">Learn More</a>
+        </div>
+    </div>
+
+</body>
+</html>

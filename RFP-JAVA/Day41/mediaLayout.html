@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Object Layout</title>
+    <style>
+        body { font-family: sans-serif; padding: 40px; background: #f9f9f9; }
+
+        /* Media Object Container */
+        .media-object {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            max-width: 500px;
+        }
+
+        /* The Image/Icon Side */
+        .media-image img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%; /* Makes it circular */
+            object-fit: cover;
+        }
+
+        /* The Text Side */
+        .media-content h4 { margin: 0 0 5px 0; color: #333; }
+        .media-content p { margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4; }
+
+        /* Responsive Breakpoint */
+        @media (max-width: 400px) {
+            .media-object {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="media-object">
+        <div class="media-image">
+            <img src="https://via.placeholder.com/100" alt="Profile">
+        </div>
+        <div class="media-content">
+            <h4>Jane Doe</h4>
+            <p>This is a standard media object layout. The image sits to the left, while the text flows naturally to the right using Flexbox.</p>
+        </div>
+    </div>
+
+</body> 
+</html>
