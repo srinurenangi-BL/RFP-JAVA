@@ -1,0 +1,16 @@
+* { box-sizing: border-box; }
+body { margin: 0; height: 100%; font-family: 'Roboto', sans-serif; background-color: #f7f7f7; }
+
+.header { padding: 15px 0; background-color: #ffffff; }
+.header-content { display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 80%; margin: 0 auto; }
+
+.emp-text { font: normal normal bold 20px Montserrat; color: #82a70c; text-transform: capitalize; }
+.emp-payroll { color: #42515f; }
+
+.main-content { padding: 30px 0; }
+.table-main { width: 80%; margin: 0 auto; overflow: auto; }
+.table { width: 100%; border-collapse: separate; border-spacing: 0 15px; }
+
+th { background: #42515F; color: #FFFFFF; text-align: left; padding: 5px 8px; }
+td { background: #ffffff; padding: 5px 8px; border: 1px solid #e3e3e3; }
+.dept-label { background-color: #e9fea5; border-radius: 40%; padding: 1px 7px; display: inline-block; font-size: 14px; margin-bottom: 8px; }
