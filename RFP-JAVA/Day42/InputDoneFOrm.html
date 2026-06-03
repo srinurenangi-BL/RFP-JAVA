@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* CSS styling for input states */
+        input { padding: 10px; border: 2px solid #ccc; outline: none; }
+
+        /* Triggered automatically by HTML5 validation rules */
+        input:invalid { border-color: #ff4757; }
+        input:valid { border-color: #2ed573; }
+
+        /* Hide error text by default, show only when invalid */
+        .error-message { color: #ff4757; display: none; font-size: 12px; }
+        input:invalid + .error-message { display: block; }
+    </style>
+</head>
+<body>
+
+    <form id="myForm">
+        <label for="username">Username (min 5 chars):</label><br>
+        <input type="text" id="username" required minlength="5">
+        <span class="error-message">Username must be at least 5 characters.</span>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Use an Event Listener for the logic
+        const form = document.getElementById('myForm');
+
+        form.addEventListener('submit', (event) => {
+            // Check if the form is valid using the built-in checkValidity()
+            if (!form.checkValidity()) {
+                event.preventDefault(); // Stop submission
+                alert("Form is invalid! Please fix the highlighted fields.");
+            } else {
+                event.preventDefault();
+                alert("Form is valid and ready for processing!");
+            }
+        });
+    </script>
+</body>
+</html>
