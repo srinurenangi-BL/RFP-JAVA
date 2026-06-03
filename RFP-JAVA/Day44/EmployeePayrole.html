@@ -2,22 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Payroll App</title>
+    <title>Full Employee Payroll Application</title>
     <style>
         .text-error { color: red; font-size: 12px; font-style: italic; }
+        .form-content { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; }
+        .row-content { margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-<div id="formId" class="form-content">
+<div class="form-content">
     <form class="form" id="payrollForm" onreset="resetForm()" onsubmit="save(event)">
-        <label class="label text" for="name">Name</label>
-        <input class="input" type="text" id="name" name="name" placeholder="Your name.." required>
-        <error-output class="text-error" for="text"></error-output>
+        <div class="form-head">Employee Payroll Form</div>
+        
+        <div class="row-content">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+            <error-output class="text-error" for="text"></error-output>
+        </div>
 
-        <label for="salary">Salary</label>
-        <input type="range" id="salary" name="salary" min="30000" max="50000" value="40000">
-        <output class="salary-output">40000</output>
+        <div class="row-content">
+            <label for="salary">Salary</label>
+            <input type="range" id="salary" name="salary" min="30000" max="50000" value="40000">
+            <output class="salary-output">40000</output>
+        </div>
+
+        <div class="row-content">
+            <label>Notes</label>
+            <textarea id="notes" name="notes"></textarea>
+        </div>
 
         <button type="submit">Submit</button>
         <button type="reset">Reset</button>
@@ -25,23 +38,32 @@
 </div>
 
 <script>
-    // UC 1: Employee Payroll Class with New Attributes [cite: 7, 9, 10]
+    // UC 1: Employee Payroll Class 
     class EmployeePayrollData {
+        get id() { return this._id; }
+        set id(id) { this._id = id; }
         get name() { return this._name; }
         set name(name) {
             let nameRegex = RegExp('^[A-Z]{1}[a-zA-Z\\s]{2,}$');
             if (nameRegex.test(name)) this._name = name;
             else throw 'Name is Incorrect!';
         }
-        // Additional getters/setters for id, salary, gender, etc., would follow this pattern [cite: 8, 10]
+        get salary() { return this._salary; }
+        set salary(salary) { this._salary = salary; }
+        get note() { return this._note; }
+        set note(note) { this._note = note; }
+        get startDate() { return this._startDate; }
+        set startDate(startDate) { this._startDate = startDate; }
+        
+        toString() {
+            return `id=${this.id}, name='${this.name}', salary=${this.salary}, note=${this.note}`;
+        }
     }
 
-    // UC 2: On Document Load Set Event Listeners [cite: 120, 124]
+    // UC 2: DOMContentLoaded Event Listeners [cite: 120, 124, 143]
     window.addEventListener('DOMContentLoaded', (event) => {
         const name = document.querySelector('#name');
         const textError = document.querySelector('.text-error');
-        
-        // Validation of Name [cite: 123]
         name.addEventListener('input', function() {
             try {
                 let empData = new EmployeePayrollData();
@@ -50,46 +72,42 @@
             } catch (e) { textError.textContent = e; }
         });
 
-        // Set Event Listener on Salary Range [cite: 122]
         const salary = document.querySelector('#salary');
         const output = document.querySelector('.salary-output');
-        salary.addEventListener('input', function() {
-            output.textContent = salary.value;
-        });
+        salary.addEventListener('input', () => { output.textContent = salary.value; });
     });
 
-    // UC 3: On Save Create Employee Payroll Object [cite: 178]
+    // UC 3 & 4: Save and Storage [cite: 167, 178, 227, 231]
     function save(event) {
         event.preventDefault();
         try {
             let employeePayrollData = createEmployeePayroll();
-            // UC 4: Ability to save Object to Local Storage [cite: 227]
             createAndUpdateStorage(employeePayrollData);
-            alert("Data Saved: " + employeePayrollData.name);
+            alert("Data Saved Successfully!");
         } catch (e) { console.error(e); }
     }
 
     const createEmployeePayroll = () => {
         let employeePayrollData = new EmployeePayrollData();
-        employeePayrollData.name = document.querySelector('#name').value;
-        // Logic to extract other fields would go here [cite: 187, 188]
+        employeePayrollData.name = getInputValueById('#name');
+        employeePayrollData.salary = getInputValueById('#salary');
+        employeePayrollData.note = getInputValueById('#notes');
         return employeePayrollData;
     };
 
-    // UC 4: Saving to Local Storage 
     function createAndUpdateStorage(employeePayrollData) {
-        let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-        if (employeePayrollList != undefined) {
-            employeePayrollList.push(employeePayrollData);
-        } else {
-            employeePayrollList = [employeePayrollData];
-        }
-        localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
+        let list = JSON.parse(localStorage.getItem("EmployeePayrollList")) || [];
+        list.push(employeePayrollData);
+        localStorage.setItem("EmployeePayrollList", JSON.stringify(list));
     }
 
-    // UC 5: Reset the Form [cite: 266, 276]
+    // Helper Methods [cite: 205, 217, 283, 287]
+    const getInputValueById = (id) => document.querySelector(id).value;
+    
+    // UC 5: Reset Logic [cite: 266, 268]
     function resetForm() {
         document.querySelector('#name').value = '';
+        document.querySelector('#notes').value = '';
         document.querySelector('.salary-output').textContent = '40000';
     }
 </script>
