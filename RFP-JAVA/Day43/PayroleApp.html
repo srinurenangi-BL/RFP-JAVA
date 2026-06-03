@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Payroll Manager</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; }
+        .app-container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #219150; }
+        .employee-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fff; margin-top: 10px; border-left: 5px solid #27ae60; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .delete-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2>Employee Payroll</h2>
+    <form id="payrollForm">
+        <input type="text" id="name" placeholder="Employee Name" required>
+        <input type="number" id="salary" placeholder="Monthly Salary" required>
+        <button type="submit">Add Employee</button>
+    </form>
+    <div id="employeeList"></div>
+</div>
+
+<script>
+    const form = document.getElementById('payrollForm');
+    const list = document.getElementById('employeeList');
+
+    // Event Listener for Adding
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const salary = document.getElementById('salary').value;
+
+        // Create elements
+        const card = document.createElement('div');
+        card.className = 'employee-card';
+        card.innerHTML = `
+            <div>
+                <strong>${name}</strong><br>Salary: $${salary}
+            </div>
+            <button class="delete-btn">Delete</button>
+        `;
+
+        // Add Delete Event Listener to the new button
+        card.querySelector('.delete-btn').addEventListener('click', () => {
+            card.remove();
+        });
+
+        list.appendChild(card);
+        form.reset();
+    });
+</script>
+
+</body>
+</html>
